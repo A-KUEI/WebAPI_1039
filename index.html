@@ -1,0 +1,155 @@
+﻿
+<html ng-app="todoApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10" />
+    <title>Angular.js JSON Fetching Example</title>
+    <script src="Scripts\angular.min.js"></script>
+    <script src="Scripts\preaudit.js"></script>
+    <script src="Scripts\jquery-1.10.2.min.js"></script>
+    <link rel="stylesheet" href="css\StyleSheet1.css">
+
+
+ <!-- <script>-->
+
+        <!--//  var uri = 'api/Preaudit';
+        //var countryApp = angular.module('countryApp', []);
+        //countryApp.controller('CountryCtrl', function ($scope, $http){
+        //    $http.get(uri).success(function (data) {
+        //        //$http.get('countries.json').success(function(data) {
+        //            $scope.countries = data;
+        //  });
+        //});
+
+        //--------------------------------------------------------'
+
+        //var F_GetStaff_To_Page2 = function (myEmpNo) {
+        //    var myPostData = {};
+        //    myPostData['Hosp'] = "1";
+        //    myPostData['APName'] = "LABGDC";
+        //    myPostData['Id'] = myEmpNo;
+        //    $.ajax({
+        //        url: "http://tpsrv58.tp.mmh.org.tw/WebAPILab/api/login",
+        //        type: "POST",
+        //        crossDomain: true,
+        //        beforeSend: function () { $.mobile.loading('show', { text: "載入中…", textVisible: "true", theme: "a" }) },
+        //        complete: function () { $.mobile.loading('hide') },
+        //        data: JSON.stringify(myPostData),
+        //        cache: false,
+        //        dataType: "json",
+        //        contentType: 'application/json',
+        //        success: function (data) {
+        //            if (data.Message == "登入成功") {
+        //                $("#P1_EmpName").text(data.Name);
+        //                $("#P1_EmpNo").text(data.Id);
+        //                $.mobile.changePage("#page2", { transtion: "slidedown", changeHash: false });
+        //                $("#P2_EmpName").text(data.Name);
+        //                $("#P2_EmpNo").text(data.Id);
+        //            } else {
+        //                $("#P1_EmpName").text("");
+        //                $("#P1_EmpNo").text("");
+        //                $("#P2_EmpName").text("");
+        //                $("#P2_EmpNo").text("");
+        //                alert(data.Message);
+        //            }
+        //        }
+        //    });
+        //} 
+            </script>-->
+
+   
+</head>
+<body>
+    <div ng-controller="FetchController">
+        <p>病歷號: <input type="text" name="user" id="1039" ng-model="pno"><button id="fetchbtn" ng-click="fetch()">查詢</button></p>
+        <br><pre class="mg">  {{Message}}</pre>
+        <p>顯示條件指定:</p>
+            <button id="getCurtabtextpbtn" ng-click="getCurtabtext('')">
+                全部顯示
+            </button>
+            <button id="getCurtabtextpbtn" ng-click="getCurtabtext('健保署')">
+                健保署
+            </button>
+            <button id="getCurtabtextpbtn" ng-click="getCurtabtext('藥委會')">
+                藥委會
+            </button>
+            <button id="getCurtabtextpbtn" ng-click="getCurtabtext('院內自審')">
+                院內自審
+            </button>
+
+            <pre>http status code: {{status}}</pre>
+            <!-- <pre>http response data: {{data}}</pre>-->
+        
+                         <label>Search: <input ng-model="searchText"></label>
+            <table class="tg">
+                <tr>
+                    <th class="tg-2awg" colspan="10">事前審查申請明細查詢</th>
+                </tr>
+                <!--<tr ng-show="countries.lenth">-->
+                <tr>
+                    <td class="tg-kxmr">病歷號</td>
+                    <td class="tg-kxmr">姓名</td>
+                    <td class="tg-kxmr">類別</td>
+                    <td class="tg-kxmr">馬偕碼</td>
+                    <td class="tg-kxmr">醫令名稱</td>
+                    <td class="tg-kxmr">殘餘量</td>
+                    <td class="tg-kxmr">申請日期</td>
+                    <td class="tg-kxmr">申請量</td>
+                    <td class="tg-kxmr">核定日期</td>
+                    <td class="tg-kxmr">核定量</td>
+
+                </tr>
+                <tr ng-repeat="country in data |  filter:searchText">
+                    <!--<td class="tg-yw4l">1</td>
+                <td class="tg-yw4l">Swimming</td>
+                <td class="tg-9abu">1:30</td>
+                <td class="tg-9abu">2:05</td>
+                <td class="tg-9abu">1:15</td>
+                <td class="tg-9abu">1:41</td>-->
+
+                    <td class="tg-9abu">{{country.PNO}}</td>
+                    <td class="tg-9abu">{{country.PATNAME}}</td>
+                    <td class="tg-9abu">{{country.TYPE}}</td>
+                    <td class="tg-9abu">{{country.MCODE}}</td>
+                    <td class="tg-9abu">{{country.ORDERNAME}}</td>
+                    <td class="tg-9abu">{{country.REMAINDER | number}}</td>
+                    <td class="tg-9abu">{{country.REQYMD | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+                    <td class="tg-9abu">{{country.REQQTY | number}}</td>
+                    <td class="tg-9abu">{{country.APVDATE | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+                    <td class="tg-9abu">{{country.APVQTY | number}}</td>
+
+                </tr>
+
+            </table>
+
+</div>
+
+ 
+
+
+    <!--<script>
+
+
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        var mypno = getUrlParameter('pno');
+  
+        //$("#1039").val("Glenn Quagmire");
+        
+       // $('input').attr('value', mypno);
+    </script>-->
+</body>
+</html>
