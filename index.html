@@ -61,8 +61,17 @@
 </head>
 <body>
     <div ng-controller="FetchController">
+        <label>
+            查詢院區:
+            <select ng-model="myHospital" ng-options="hospital.name for hospital in hospitals"></select>
+        </label><br />
+     
+        <!--Currently selected: {{ {selected_hospital:myHospital} }}-->
+
         <p>病歷號: <input type="text" name="user" id="1039" ng-model="pno"><button id="fetchbtn" ng-click="fetch()">查詢</button></p>
-        <br><pre class="mg">  {{Message}}</pre>
+        <hr />
+        
+             <br><pre class="mg">  {{Message}}</pre>
         <p>顯示條件指定:</p>
             <button id="getCurtabtextpbtn" ng-click="getCurtabtext('')">
                 全部顯示
@@ -83,7 +92,7 @@
                          <label>Search: <input ng-model="searchText"></label>
             <table class="tg">
                 <tr>
-                    <th class="tg-2awg" colspan="10">事前審查申請明細查詢</th>
+                    <th class="tg-2awg" colspan="11">事前審查申請明細查詢</th>
                 </tr>
                 <!--<tr ng-show="countries.lenth">-->
                 <tr>
@@ -97,6 +106,7 @@
                     <td class="tg-kxmr">申請量</td>
                     <td class="tg-kxmr">核定日期</td>
                     <td class="tg-kxmr">核定量</td>
+                    <td class="tg-kxmr">院區</td>
 
                 </tr>
                 <tr ng-repeat="country in data |  filter:searchText">
@@ -117,6 +127,7 @@
                     <td class="tg-9abu">{{country.REQQTY | number}}</td>
                     <td class="tg-9abu">{{country.APVDATE | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
                     <td class="tg-9abu">{{country.APVQTY | number}}</td>
+                    <td class="tg-9abu">{{country.HOSPITAL  }}</td>
 
                 </tr>
 

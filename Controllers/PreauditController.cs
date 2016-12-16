@@ -23,7 +23,7 @@ namespace WebAPI_1039.Controllers
     public IEnumerable<Preaudit> GetAllPreaudits()
         {
 
-            return getDatafromPreaudit("","ALL");
+            return getDatafromPreaudit("","","ALL");
 
 
             //List<Preaudit> Preaudits = new List<Preaudit>();
@@ -86,10 +86,10 @@ namespace WebAPI_1039.Controllers
         }
 
         // GET: api/Preaudit/5
-        public IEnumerable<Preaudit> Get(string Pno)
+        public IEnumerable<Preaudit> Get(string Pno,string hospital)
         {
           
-            return getDatafromPreaudit(Pno,"ALL");
+            return getDatafromPreaudit(Pno,hospital,"ALL");
         }
 
         // POST: api/Preaudit
@@ -107,7 +107,7 @@ namespace WebAPI_1039.Controllers
         {
         }
 
-        private static List<Preaudit>  getDatafromPreaudit(string Pno,string Mode)
+        private static List<Preaudit>  getDatafromPreaudit(string Pno,string hospital,string Mode)
         {
             string myPno;
             string myMode;
@@ -120,7 +120,32 @@ namespace WebAPI_1039.Controllers
                 myPno = "88001555";
             };
 
-       
+            string myHospital;
+            string myHospital_Name;
+            switch (hospital)
+            {
+                case "1":
+                    myHospital = "TP_OPD_ORD";
+                    myHospital_Name = "台北";
+                    break;
+                case "2":
+                    myHospital = "TS_OPD_ORD";
+                    myHospital_Name = "淡水";
+                    break;
+                case "3":
+                    myHospital = "TT_OPD_ORD";
+                    myHospital_Name = "台東";
+                    break;
+                case "4":
+                    myHospital = "HC_OPD_ORD";
+                    myHospital_Name = "新竹";
+                    break;
+                default:
+                    myHospital = "TP_OPD_ORD";
+                    myHospital_Name = "台北";
+                    break;
+            }
+
             switch (Mode)
             {
                 case "D":
@@ -137,10 +162,10 @@ namespace WebAPI_1039.Controllers
                     break;
             }
             List<Preaudit> Preaudits = new List<Preaudit>();
-            string connectionString = "Provider=MSDAORA;User ID=his;Data Source=TP_OPD_ORD;Persist Security Info=False;PassWord=his1160";
+            string connectionString = "Provider=MSDAORA;User ID=his;Data Source=" + myHospital + "; Persist Security Info=False;PassWord=his1160";
 
             //string query = "SELECT PNO,MCODE,REMAINDER  FROM Preaudit  where pno=88001555 and mcode='21141' ";
-            string query = "SELECT  PREAUDIT.PNO,IDP.NAME AS PATNAME , PREAUDIT.MCODE, PREAUDIT.TYPE, PREAUDIT.REMAINDER, PREAUDIT.REQYMD, PREAUDIT.REQQTY, PREAUDIT.APVDATE, PREAUDIT.APVQTY,ODRC.NAME AS ORDERNAME  FROM Preaudit,IDP,ODRC  where PREAUDIT.PNO=" + myPno + " AND IDP.PNO=PREAUDIT.PNO AND ODRC.MCODE=PREAUDIT.MCODE  ";
+            string query = "SELECT '' AS HOSPITAL, PREAUDIT.PNO,IDP.NAME AS PATNAME , PREAUDIT.MCODE, PREAUDIT.TYPE, PREAUDIT.REMAINDER, PREAUDIT.REQYMD, PREAUDIT.REQQTY, PREAUDIT.APVDATE, PREAUDIT.APVQTY,ODRC.NAME AS ORDERNAME  FROM Preaudit,IDP,ODRC  where PREAUDIT.PNO=" + myPno + " AND IDP.PNO=PREAUDIT.PNO AND ODRC.MCODE=PREAUDIT.MCODE  ";
 
             query = query + myMode;
 
@@ -179,7 +204,10 @@ namespace WebAPI_1039.Controllers
             foreach (DataRow myRow in dt.Rows)
                 {
 
+                myRow["HOSPITAL"] = myHospital_Name;
+
                 String myType;
+
                 myType = Convert.ToString(myRow["TYPE"]);
                     switch (myType)
                     {
@@ -227,6 +255,7 @@ namespace WebAPI_1039.Controllers
                              APVQTY = Convert.ToString(dr["APVQTY"]),
                              REMAINDER = Convert.ToString(dr["REMAINDER"]),
                              text = Convert.ToString(dr["MCODE"]),
+                             HOSPITAL= Convert.ToString(dr["HOSPITAL"]),
                              done = false
                          }).ToList();
 

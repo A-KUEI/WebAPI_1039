@@ -17,17 +17,42 @@ app.controller('FetchController', ['$scope','$location', '$http', '$templateCach
       $scope.pno = "";
       $scope.searchText = "";
       $scope.Message = "";
+   
+
+      $scope.hospitals = [{
+          id: 1,
+          name: '台北',
+      }, {
+          id: 2,
+          name: '淡水',
+      }, {
+          id: 3,
+          name: '台東',
+      }, {
+          id: 4,
+          name: '新竹',
+      }
+
+      ];
+
+      $scope.myhospital = $scope.hospitals[0];
+
 
       $scope.$location = $location;
-      //$scope.ur = $scope.$location.url('http://localhost:64146/index.html?pno=88001555');
+      //$scope.ur = $scope.$location.url('http://localhost:64146/index.html?pno=88001555,hospital=1');
       var myUrl;
       myUrl = $scope.$location.absUrl();
 
       $scope.ur = $scope.$location.url(myUrl);
       $scope.loc1 = $scope.$location.search().pno;
       if ($location.url().indexOf('pno') > -1) {
-          $scope.pno = $location.url().split('=')[1];
-          $scope.url = 'api/Preaudit/?Pno=' + $scope.pno;
+          //$scope.pno = $location.url().split('=')[1];
+
+          $scope.pno = $location.search().pno;
+          $scope.hospital= $location.search().hospital;
+          $scope.myHospital = $scope.hospitals[$location.search().hospital-1];
+          
+          $scope.url = 'api/Preaudit/?Pno=' + $scope.pno + '&hospital=' + $scope.myHospital.id;
           $scope.Message = '查詢中，請稍候！';
 
 
@@ -90,7 +115,7 @@ app.controller('FetchController', ['$scope','$location', '$http', '$templateCach
 
         
 
-          $scope.url = 'api/Preaudit/?Pno=' + $scope.pno;
+          $scope.url = 'api/Preaudit/?Pno=' + $scope.pno + '&hospital=' + $scope.myHospital.id;
           $scope.Message = '查詢中，請稍候！';
         
           
@@ -139,13 +164,16 @@ app.controller('FetchController', ['$scope','$location', '$http', '$templateCach
       $scope.updateModel = function(method, url) {
           $scope.method = method;
           $scope.url = url;
-      
       };
 
 
       $scope.getCurtabtext = function (mysearch) {
           $scope.searchText=mysearch
       };
+
+
+    
+     
 
       
   }]);

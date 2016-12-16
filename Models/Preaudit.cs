@@ -29,6 +29,7 @@ namespace WebAPI_1039.Models
         //public string SLIMIT            { get; set; }
         //public string MENO              { get; set; }
         public string APVDATE           { get; set; }
+        public string HOSPITAL { get; set; }
         //public string REQNO             { get; set; }
         //public string FAILREP           { get; set; }
         //public string POS               { get; set; }
