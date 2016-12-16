@@ -1,0 +1,5 @@
+<<<<<<< master
+12313213
+=======
+XCVZXCVGXCVZCV
+>>>>>>> local
